@@ -310,24 +310,78 @@ class Footprint(TileMixin, IntersectionMixin, MoveMixin):
             rsize=rsize,
         )
 
-    def _morpho(self, scount):
-        aff = self._aff * affine.Affine.translation(-scount, -scount)
+    def _morpho(self, left, right, top, bottom):
+        if left == right == top == bottom == 0:
+            return self
+        aff = self._aff * affine.Affine.translation(-left, -top)
         return Footprint(
             gt=aff.to_gdal(),
-            rsize=(self.rsize + 2 * scount),
+            rsize=(self.rsize + [left + right, top + bottom]),
         )
 
-    def erode(self, count):
-        """Construct a new Footprint from self, eroding all edges by :code:`count` pixels"""
-        assert count >= 0
-        assert count == int(count)
-        return self._morpho(-count)
+    def erode(self, *args):
+        """erode(self, inward_count, /)
+        erode(self, inward_count_x, inward_count_y, /)
+        erode(self, inward_count_left, inward_count_right, inward_count_top, inward_count_bottom, /)
 
-    def dilate(self, count):
-        """Construct a new Footprint from self, dilating all edges by :code:`count` pixels"""
-        assert count >= 0
-        assert count == int(count)
-        return self._morpho(count)
+        Erode self's edges by the given pixel count to construct a new Footprint.
+
+        A negative erosion is a dilation.
+
+        Parameters
+        ----------
+        *args: int or (int, int) or (int, int, int, int)
+            When `int`, erode all 4 directions by that much pixels
+            When `(int, int)`, erode x and y by a different number of pixel
+            When `(int, int, int, int)`, erode all 4 directions with a different number of pixel
+
+        Returns
+        -------
+        Footprint
+
+        """
+        if len(args) == 1:
+            left = right = top = bottom = args[0]
+        elif len(args) == 2:
+            left, top = right, bottom = args
+        elif len(args) == 4:
+            left, right, top, bottom = args
+        else:
+            raise ValueError('Expecting one, two or four positional parameters')
+        left, right, top, bottom = map(lambda x: -int(x), [left, right, top, bottom])
+        return self._morpho(left, right, top, bottom)
+
+    def dilate(self, *args):
+        """dilate(self, inward_count, /)
+        dilate(self, inward_count_x, inward_count_y, /)
+        dilate(self, inward_count_left, inward_count_right, inward_count_top, inward_count_bottom, /)
+
+        Dilate self's edges by the given pixel count to construct a new Footprint.
+
+        A negative dilation is an erosion.
+
+        Parameters
+        ----------
+        *args: int or (int, int) or (int, int, int, int)
+            When `int`, dilate all 4 directions by that much pixels
+            When `(int, int)`, dilate x and y by a different number of pixel
+            When `(int, int, int, int)`, dilate all 4 directions with a different number of pixel
+
+        Returns
+        -------
+        Footprint
+
+        """
+        if len(args) == 1:
+            left = right = top = bottom = args[0]
+        elif len(args) == 2:
+            left, top = right, bottom = args
+        elif len(args) == 4:
+            left, right, top, bottom = args
+        else:
+            raise ValueError('Expecting one, two or four positional parameters')
+        left, right, top, bottom = map(lambda x: int(x), [left, right, top, bottom])
+        return self._morpho(left, right, top, bottom)
 
     def intersection(self, *objects, **kwargs):
         """intersection(self, *objects, scale='self', rotation='auto', alignment='auto', \
