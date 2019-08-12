@@ -24,10 +24,10 @@ references:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
 
-  py34_container_config: &py34_container_config
+  py35_container_config: &py35_container_config
     working_directory: *working_directory
     docker:
-      - image: $AWS_ECR_IMAGE_TAG_34
+      - image: $AWS_ECR_IMAGE_TAG_35
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -71,17 +71,17 @@ references:
         - *py27_requirements_cache_key
         - *py27_requirements_backup_cache_key
 
-  py34_requirements_cache_key: &py34_requirements_cache_key
-    py34-dependencies-v7-{{ checksum "requirements-ci.txt" }}-{{ checksum "setup.py" }}
+  py35_requirements_cache_key: &py35_requirements_cache_key
+    py35-dependencies-v7-{{ checksum "requirements-ci.txt" }}-{{ checksum "setup.py" }}
 
-  py34_requirements_backup_cache_key: &py34_requirements_backup_cache_key
-    py34-dependencies-v7-
+  py35_requirements_backup_cache_key: &py35_requirements_backup_cache_key
+    py35-dependencies-v7-
 
-  py34_restore_dependencies: &py34_restore_dependencies
+  py35_restore_dependencies: &py35_restore_dependencies
     restore_cache:
       keys:
-        - *py34_requirements_cache_key
-        - *py34_requirements_backup_cache_key
+        - *py35_requirements_cache_key
+        - *py35_requirements_backup_cache_key
 
   py36_requirements_cache_key: &py36_requirements_cache_key
     py36-dependencies-v7-{{ checksum "requirements-ci.txt" }}-{{ checksum "setup.py" }}
@@ -173,24 +173,24 @@ jobs:
           paths:
             - ./venvs/27
 
-  py34_test:
-    <<: *py34_container_config
+  py35_test:
+    <<: *py35_container_config
     parallelism: 1
     steps:
       - *restore_repo
-      - *py34_restore_dependencies
+      - *py35_restore_dependencies
       - run:
-          name: install python34 dependencies
+          name: install python35 dependencies
           command: |
-            mkdir -p venvs/34
-            python -m venv ./venvs/34
-            . venvs/34/bin/activate
+            mkdir -p venvs/35
+            python -m venv ./venvs/35
+            . venvs/35/bin/activate
             pip install -r requirements-ci.txt
       # run tests!
       - run:
           name: run tests
           command: |
-            . venvs/34/bin/activate
+            . venvs/35/bin/activate
             python scripts/pytest_parallel.py -x --junitxml=test-reports/pytest-report.xml
       - store_artifacts:
           path: test-reports
@@ -198,9 +198,9 @@ jobs:
       - store_test_results:
           path: test-reports
       - save_cache:
-          key: *py34_requirements_cache_key
+          key: *py35_requirements_cache_key
           paths:
-            - ./venvs/34
+            - ./venvs/35
 
   py36_test:
     <<: *py36_container_config
@@ -295,9 +295,9 @@ workflows:
           filters:
             branches:
               only: /^v0\.4\..*/
-      # - py34_test:
-      #     requires:
-      #       - init
+      - py35_test:
+          requires:
+            - init
       - py36_test:
           requires:
             - init
@@ -307,6 +307,6 @@ workflows:
       - end:
           requires:
             - lint
-            # - py34_test
+            - py35_test
             - py36_test
             - py37_test
