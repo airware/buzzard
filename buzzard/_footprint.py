@@ -2384,7 +2384,7 @@ class Footprint(TileMixin, IntersectionMixin, MoveMixin):
             rsize=rsize1,
         ))
         # *********************************************************************** **
-        return buzz.Footprint(
+        return Footprint(
             gt=(tl1[0], dx, rx, tl1[1], ry, dy),
             rsize=rsize1,
         )
@@ -2457,7 +2457,7 @@ class Footprint(TileMixin, IntersectionMixin, MoveMixin):
             assert np.all(aff.to_gdal() == fp1.gt), (aff.to_gdal(), fp1.gt)
 
         # *********************************************************************** **
-        return buzz.Footprint(
+        return Footprint(
             gt=(tl0[0], dx, rx, tl0[1], ry, dy),
             rsize=rsize0,
         )
@@ -2551,7 +2551,7 @@ class Footprint(TileMixin, IntersectionMixin, MoveMixin):
             assert np.all(aff.to_gdal() == fp0.gt), (aff.to_gdal(), fp0.gt)
 
         # *********************************************************************** **
-        return buzz.Footprint(
+        return Footprint(
             gt=(tl1[0], dx, rx, tl1[1], ry, dy),
             rsize=rsize1,
         )
@@ -2632,7 +2632,7 @@ class Footprint(TileMixin, IntersectionMixin, MoveMixin):
             assert np.all(aff.to_gdal() == fp1.gt), (aff.to_gdal(), fp1.gt)
 
         # *********************************************************************** **
-        return buzz.Footprint(
+        return Footprint(
             gt=(tl0[0], dx, rx, tl0[1], ry, dy),
             rsize=rsize0,
         )

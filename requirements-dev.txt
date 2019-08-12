@@ -8,3 +8,4 @@ pylint>=1.7.1
 Sphinx>=1.7.4
 recommonmark>=0.4.0
 sphinx_rtd_theme>=0.4.0
+torch>=1.2.0
