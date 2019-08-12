@@ -295,9 +295,9 @@ workflows:
           filters:
             branches:
               only: /^v0\.4\..*/
-      - py34_test:
-          requires:
-            - init
+      # - py34_test:
+      #     requires:
+      #       - init
       - py36_test:
           requires:
             - init
@@ -307,5 +307,6 @@ workflows:
       - end:
           requires:
             - lint
-            - py34_test
+            # - py34_test
+            - py36_test
             - py37_test

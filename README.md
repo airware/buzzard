@@ -227,10 +227,11 @@ To enjoy the latest buzzard features, update your python!
 
 #### Full python support
 - Latest supported version: `3.7` (June 2018)
-- Oldest supported version: `3.4` (March 2014)
+- Oldest supported version: `3.5` (Sept 2015)
 
 #### Partial python support
 - `2.7`: use buzzard version `0.4.4`
+- `3.4`: use buzzard version `0.6.3`
 
 ## Slack
 You want some help? You have a question? You want to contribute? Join us on Slack!
