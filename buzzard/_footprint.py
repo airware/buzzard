@@ -350,19 +350,19 @@ class Footprint(TileMixin, IntersectionMixin, MoveMixin):
             raise ValueError('Expecting one, two or four positional parameters')
 
         v = int(left)
-        if v != left:
+        if v != left: # pragma: no cover
             raise ValueError('left should be an integer')
         left = v
         v = int(right)
-        if v != right:
+        if v != right: # pragma: no cover
             raise ValueError('right should be an integer')
         right = v
         v = int(top)
-        if v != top:
+        if v != top: # pragma: no cover
             raise ValueError('top should be an integer')
         top = v
         v = int(bottom)
-        if v != bottom:
+        if v != bottom: # pragma: no cover
             raise ValueError('bottom should be an integer')
         bottom = v
 
@@ -400,19 +400,19 @@ class Footprint(TileMixin, IntersectionMixin, MoveMixin):
             raise ValueError('Expecting one, two or four positional parameters')
 
         v = int(left)
-        if v != left:
+        if v != left: # pragma: no cover
             raise ValueError('left should be an integer')
         left = v
         v = int(right)
-        if v != right:
+        if v != right: # pragma: no cover
             raise ValueError('right should be an integer')
         right = v
         v = int(top)
-        if v != top:
+        if v != top: # pragma: no cover
             raise ValueError('top should be an integer')
         top = v
         v = int(bottom)
-        if v != bottom:
+        if v != bottom: # pragma: no cover
             raise ValueError('bottom should be an integer')
         bottom = v
 
@@ -2357,7 +2357,7 @@ class Footprint(TileMixin, IntersectionMixin, MoveMixin):
 
         # *********************************************************************** **
         rsize0_padded = fp0.rsize + padding * 2
-        if np.any(rsize0_padded < kernel_size):
+        if np.any(rsize0_padded < kernel_size): # pragma: no cover
             fmt = ("Can't conv2d with kernel:{:.0f}x{:.0f} dil:{:.0f}x{:.0f} pad:{:.0f}x{:.0f} on "
                    "input-shape:{:.0f}x{:.0f} because on at least one dimension: "
                    "padded-input-shape:{:.0f}x{:.0f} < kernel-span:{:.0f}x{:.0f}."
@@ -2527,7 +2527,7 @@ class Footprint(TileMixin, IntersectionMixin, MoveMixin):
 
         # *********************************************************************** **
         rsize_inner = fp0.rsize + (fp0.rsize - 1) * (stride - 1) + padding_input * 2
-        if np.any(rsize_inner < kernel_size):
+        if np.any(rsize_inner < kernel_size): # pragma: no cover
             fmt = ("Can't convtranspose2d with "
                    "kernel:{:.0f}x{:.0f} dil:{:.0f}x{:.0f} pad:{:.0f}x{:.0f} on "
                    "input-shape:{:.0f}x{:.0f} because on at least one dimension: "
@@ -2695,15 +2695,15 @@ def _parse_conv2d_params(*args, allow_neg_padding=True):
         v = np.asarray(v).flatten()
         if v.size == 1:
             v = np.asarray((v[0], v[0]))
-        if v.size != 2:
+        if v.size != 2: # pragma: no cover
             raise ValueError('{} should have size 1 or 2'.format(k))
         w = v.astype(int, copy=False)
-        if np.any(v != w):
+        if np.any(v != w): # pragma: no cover
             raise ValueError('{} should be of type int'.format(k))
-        if 'padding' not in k:
+        if 'padding' not in k: # pragma: no cover
             if np.any(v < 1):
                 raise ValueError('{} should be greater or equal to 1'.format(k))
-        if 'padding' in k and not allow_neg_padding:
+        if 'padding' in k and not allow_neg_padding: # pragma: no cover
             if np.any(v < 0):
                 raise ValueError('{} should be greater or equal to 0'.format(k))
 
