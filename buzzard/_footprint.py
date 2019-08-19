@@ -346,7 +346,7 @@ class Footprint(TileMixin, IntersectionMixin, MoveMixin):
             left, top = right, bottom = args
         elif len(args) == 4:
             left, right, top, bottom = args
-        else:
+        else: # pragma: no cover
             raise ValueError('Expecting one, two or four positional parameters')
 
         v = int(left)
@@ -370,9 +370,9 @@ class Footprint(TileMixin, IntersectionMixin, MoveMixin):
         return self._morpho(left, right, top, bottom)
 
     def dilate(self, *args):
-        """dilate(self, inward_count, /)
-        dilate(self, inward_count_x, inward_count_y, /)
-        dilate(self, inward_count_left, inward_count_right, inward_count_top, inward_count_bottom, /)
+        """dilate(self, outward_count, /)
+        dilate(self, outward_count_x, outward_count_y, /)
+        dilate(self, outward_count_left, outward_count_right, outward_count_top, outward_count_bottom, /)
 
         Dilate self's edges by the given pixel count to construct a new Footprint.
 
@@ -396,7 +396,7 @@ class Footprint(TileMixin, IntersectionMixin, MoveMixin):
             left, top = right, bottom = args
         elif len(args) == 4:
             left, right, top, bottom = args
-        else:
+        else: # pragma: no cover
             raise ValueError('Expecting one, two or four positional parameters')
 
         v = int(left)
@@ -940,8 +940,8 @@ class Footprint(TileMixin, IntersectionMixin, MoveMixin):
 
     @property
     def rsizey(self):
-        """Pixel quantity: pixel per column"""
-        return int(self._rsize[1])
+       """Pixel quantity: pixel per column"""
+       return int(self._rsize[1])
 
     @property
     def rwidth(self):
@@ -2379,10 +2379,6 @@ class Footprint(TileMixin, IntersectionMixin, MoveMixin):
         if np.all(stride == 1):
             assert np.all(aff.to_gdal() == fp0.gt), (aff.to_gdal(), fp0.gt)
 
-        print(dict(
-            gt=(tl1[0], dx, rx, tl1[1], ry, dy),
-            rsize=rsize1,
-        ))
         # *********************************************************************** **
         return Footprint(
             gt=(tl1[0], dx, rx, tl1[1], ry, dy),
